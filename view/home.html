@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>保存Redis数据-样本</title>
+    <style>
+        body {
+            margin: 5px;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .main {
+            margin: 20px 1px 100px;
+        }
+
+        textarea {
+            width: 100%;
+        }
+
+        p {
+            max-width: 100%;
+        }
+
+        p {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        #msg {
+            display: inline-block;
+            margin-left: 1em;
+        }
+
+        input[type="number"] {
+            height: 28px;
+            border: 1px solid #9e9e9e1a;
+        }
+    </style>
+</head>
+
+<body>
+<div class="main">
+    <div>
+        <p>
+            <a href="/">主页</a> &nbsp; &nbsp;
+            <a href="/view/admin.html">管理后台</a>
+        </p>
+    </div>
+    <textarea id="data1" rows="4" cols="40" placeholder="数据1"></textarea>
+    <p>
+        数据2: <input type="number" id="data2" value="100">
+    </p>
+    <p>
+        数据3: <input type="number" id="data3" value="50">
+    </p>
+
+    <button onclick="run()">保存数据</button>
+
+
+</div>
+<main style="margin-top: 200px;">
+    <p>说明：</p>
+    <p> 首先，你需要安装 Predis 和 Slim 框架，你可以通过composer来进行安装</p>
+    <p>后端有2个接口，/save保存数据，/lists读取redis数据； </p>
+    <p> 返回给前端，展示到列表当中；</p>
+
+</main>
+<footer style=" margin-top: 500px;color: #efefef;">
+    友情链接 <a href="https://tl.beer" style="color: #efefef;"> 爱问工具 </a>
+</footer>
+
+<script>
+    document.querySelector('#data1').value = Math.random()
+
+    function run() {
+        let d1 = document.getElementById('data1').value
+        let d2 = document.getElementById('data2').value
+        let d3 = document.getElementById('data3').value
+        postAjax("/save", {"data1": d1, "data2": d2, "data3": d3})
+        // console.log(result)
+        // alert(result.msg)
+    }
+
+    function postAjax(url, ajaxdata) {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(ajaxdata)
+        }).then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Something went wrong');
+            }
+        }).then((responseJson) => {
+            // Do something with the response
+            alert(responseJson.msg);
+        }).catch((error) => {
+            console.log(error)
+            alert("喔喔 请求出错");
+        });
+    }
+
+</script>
+
+</body>
+
+</html>

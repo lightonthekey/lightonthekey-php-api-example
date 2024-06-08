@@ -1,0 +1,6 @@
+{
+    "require": {
+        "predis/predis": "^2.2",
+        "slim/slim": "3.0"
+    }
+}

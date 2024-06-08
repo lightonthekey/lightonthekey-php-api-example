@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>读取redis - 后台数据</title>
+    <script src="/view/jquery-3.5.1.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        table th,
+        table td {
+            padding: 12px 15px;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+
+        .main {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        table {
+            max-width: 1200px;
+        }
+    </style>
+</head>
+<body>
+<main class="main">
+    <div>
+        <p>
+            <a href="/">主页</a> &nbsp; &nbsp;
+            <a href="/view/admin.html">管理后台</a>
+        </p>
+    </div>
+    <h5>读取redis - 后台数据</h5>
+    <table id="dataTable">
+        <thead>
+        <tr>
+            <td>序号</td>
+            <td>数据1</td>
+            <td>数据2</td>
+            <td>数据3</td>
+            <td>ip</td>
+            <td>创建时间</td>
+        </tr>
+        </thead>
+        <!-- Data will be inserted here -->
+    </table>
+
+</main>
+<script>
+    $(document).ready(function () {
+        $.get('/lists', function (data) {
+            if (data.code !== 200) {
+                alert(data.msg)
+                return
+            } else if (!data.data) {
+                $("#dataTable").append("<tr><td>暂无数据</td></tr>");
+                return
+            }
+            data.data.forEach(function (item, key) {
+                var arr = []
+                if (typeof item == "string") {
+                    arr = JSON.parse(item)
+                }
+                let str = `
+                <tr>
+                <td>${key}</td>
+                <td>${arr.data1}</td>
+                <td>${arr.data2}</td>
+                <td>${arr.data3}</td>
+                <td>${arr.ip}</td>
+                <td>${arr.create_at}</td>
+                </tr>
+                `
+                $("#dataTable").append(str);
+            });
+        });
+    });
+</script>
+</body>
+</html>
